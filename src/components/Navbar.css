@@ -1,0 +1,68 @@
+.navbar {
+  background-color: #026b94; /* Color celeste oscuro para la navbar */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 2rem;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo-img {
+  height: 40px;
+  width: auto;
+}
+
+.navbar-logo h1 {
+  color: #f8f9fa; /* Color blanco roto para mejor contraste */
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.nav-menu {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item {
+  margin: 0 1rem;
+}
+
+.nav-link {
+  color: #f8f9fa; /* Color blanco roto para los enlaces */
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #d3dce0; /* Un celeste más claro al pasar el mouse */
+}
+
+/* Ajuste para el contenido principal */
+body {
+  padding-top: 70px; /* Mismo valor que la altura de la navbar */
+} 

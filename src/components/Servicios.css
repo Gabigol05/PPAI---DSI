@@ -1,0 +1,119 @@
+.servicios-container {
+  padding: 2rem;
+  margin-top: 1px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.servicios-container h1 {
+  color: #026b94;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 700;
+  margin-top: 0;
+  padding-top: 0.5rem;
+}
+
+.acordeon-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.acordeon-item {
+  background: #e9ecef;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.acordeon-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.acordeon-header {
+  padding: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #d3dce0;
+  transition: background-color 0.3s ease;
+}
+
+.acordeon-header:hover {
+  background-color: #ced4da;
+}
+
+.acordeon-titulo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.acordeon-icono {
+  font-size: 1.5rem;
+  color: #026b94;
+}
+
+.acordeon-titulo h3 {
+  margin: 0;
+  color: #026b94;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.acordeon-contenido {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  padding: 0 1.5rem;
+  background-color: white;
+}
+
+.acordeon-item.active .acordeon-contenido {
+  max-height: 500px;
+  padding: 1.5rem;
+}
+
+.acordeon-contenido p {
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.servicio-btn {
+  width: 100%;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  background-color: #09852e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.servicio-btn:hover {
+  background-color: #076c25;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.servicio-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.evento-item.selected {
+  border-left: 5px solid #026b94;
+}
+
+.evento-item p strong {
+  color: #026b94;
+} 
