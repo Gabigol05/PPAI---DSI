@@ -19,39 +19,12 @@ const EventoDetalle = () => {
   const { eventoBloqueado } = location.state || {};
 
   const [mostrarMuestras, setMostrarMuestras] = useState(false);
-  const [eventoDetalles, setEventoDetalles] = useState(null);
+  const [datosEvento, setDatosEvento] = useState(null);
   const [loadingDetalles, setLoadingDetalles] = useState(true);
   const [errorDetalles, setErrorDetalles] = useState(null);
 
-  // Datos simulados de la serie temporal y sus muestras
-  const serieTemporalSimulada = {
-    fechaHoraInicio: "21/02/2025 19:05:41",
-    frecuenciaMuestreo: "50 Hz",
-    alertaAlarma: "False",
-    muestras: [
-      {
-        fechaHora: "21/02/2025 19:05:41",
-        velocidadOnda: "7 Km/seg",
-        frecuenciaOnda: "10 Hz",
-        longitud: "0.7 km/ciclo"
-      },
-      {
-        fechaHora: "21/02/2025 19:10:41",
-        velocidadOnda: "7.02 Km/seg",
-        frecuenciaOnda: "10 Hz",
-        longitud: "0.69 km/ciclo"
-      },
-      {
-        fechaHora: "21/02/2025 19:15:41",
-        velocidadOnda: "6.99 Km/seg",
-        frecuenciaOnda: "10.01 Hz",
-        longitud: "0.7 km/ciclo"
-      }
-    ]
-  };
-
   useEffect(() => {
-    const fetchEventoDetalles = async () => {
+    const fetchDatosEvento = async () => {
       if (!eventoBloqueado?.id) {
         setErrorDetalles('No se proporcionó un ID de evento.');
         setLoadingDetalles(false);
@@ -60,27 +33,45 @@ const EventoDetalle = () => {
       setLoadingDetalles(true);
       setErrorDetalles(null);
       try {
-        const response = await fetch(`${API_URL}/eventos-sismos/eventos/${eventoBloqueado.id}`, {
-          ...fetchOptions,
-          method: 'GET'
-        });
-        
+        const response = await fetch(`${API_URL}/eventos-sismos/eventos/${eventoBloqueado.id}/datos`, fetchOptions);
         if (!response.ok) {
           const errorBody = await response.text();
-          throw new Error(`Error al cargar detalles del evento: ${response.status} ${response.statusText}. Detalles: ${errorBody}`);
+          throw new Error(`Error al cargar datos del evento: ${response.status} ${response.statusText}. Detalles: ${errorBody}`);
         }
-        
         const data = await response.json();
-        setEventoDetalles(data);
+        setDatosEvento(data);
       } catch (err) {
         setErrorDetalles(err.message);
       } finally {
         setLoadingDetalles(false);
       }
     };
+    fetchDatosEvento();
+  }, [eventoBloqueado?.id]);
 
-    fetchEventoDetalles();
-  }, [eventoBloqueado?.id]); // Ejecutar cuando el ID del evento cambie
+  // Utilidad para formatear fecha/hora
+  const formatearFechaHora = (fechaHora) => {
+    if (!fechaHora) return 'N/A';
+    try {
+      return new Date(fechaHora).toLocaleString('es-AR', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        fractionalSecondDigits: 3
+      });
+    } catch (error) {
+      return fechaHora;
+    }
+  };
+
+  // Utilidad para obtener valor de un tipo de dato en detalles de muestra
+  const obtenerValorDetalle = (detalles, tipoDato) => {
+    const detalle = detalles.find(d => d.tipoDatoDenominacion === tipoDato);
+    return detalle ? detalle.valor : 'N/A';
+  };
 
   if (!eventoBloqueado) {
     return (
@@ -103,84 +94,90 @@ const EventoDetalle = () => {
   if (errorDetalles) {
     return <div className="servicio-detalle-container">Error al cargar detalles: {errorDetalles}</div>;
   }
-  
-  // Usamos eventoDetalles si está disponible, de lo contrario usamos eventoBloqueado (datos iniciales)
-  const eventoParaMostrar = eventoDetalles || eventoBloqueado;
 
   return (
     <div className="servicio-detalle-container">
       <div className="servicio-contenido">
         <h2>Detalles del Evento Bloqueado</h2>
-        
-        {/* Sección de Información General */}
-        <div className="detalles-seccion">
-          <h3>Información General</h3>
-          <p><strong>Fecha y Hora:</strong> {eventoParaMostrar.fecha_hora}</p>
-          <p><strong>Estado:</strong> {eventoParaMostrar.estado || 'N/A'}</p>
-          <p><strong>Fecha de Bloqueo:</strong> {eventoParaMostrar.fechaBloqueo ? new Date(eventoParaMostrar.fechaBloqueo).toLocaleString() : 'N/A'}</p>
-          <p><strong>Usuario que Bloqueó:</strong> {eventoParaMostrar.usuarioBloqueo || 'N/A'}</p>
-          <p><strong>Magnitud:</strong> {eventoParaMostrar.magnitud}</p>
-        </div>
-
-        {/* Sección de Ubicación */}
-        <div className="detalles-seccion">
-          <h3>Ubicación</h3>
-          <h4>Epicentro</h4>
-          <p><strong>Latitud:</strong> {eventoParaMostrar.ubicacion?.epicentro?.lat || 'N/A'}</p>
-          <p><strong>Longitud:</strong> {eventoParaMostrar.ubicacion?.epicentro?.lon || 'N/A'}</p>
-          
-          <h4>Hipocentro</h4>
-          <p><strong>Latitud:</strong> {eventoParaMostrar.ubicacion?.hipocentro?.lat || 'N/A'}</p>
-          <p><strong>Longitud:</strong> {eventoParaMostrar.ubicacion?.hipocentro?.lon || 'N/A'}</p>
-        </div>
-
-        {/* Sección Agrupada: Clasificación, Alcance, Origen */}
         <div className="detalles-seccion">
           <h3>Características Adicionales</h3>
-          
-          <p><strong>Clasificación:</strong> {eventoParaMostrar.clasificacion?.nombre || 'N/A'}</p>
-          <p><strong>Alcance del Sismo:</strong> {eventoParaMostrar.alcanceSismo?.nombre || 'N/A'}</p>
-          <p><strong>Origen de Generación:</strong> {eventoParaMostrar.origenDeGeneracion?.nombre || 'N/A'}</p>
+          <p><strong>Clasificación:</strong> {datosEvento?.clasificacion || 'N/A'}</p>
+          <p><strong>Alcance del Sismo:</strong> {datosEvento?.alcance || 'N/A'}</p>
+          <p><strong>Origen de Generación:</strong> {datosEvento?.origen || 'N/A'}</p>
         </div>
 
-        {/* Sección para la serie temporal */}
-        <div className="detalles-seccion serie-temporal-container">
-          <h3 onClick={() => setMostrarMuestras(!mostrarMuestras)} style={{ cursor: 'pointer' }}>
-            Serie Temporal {mostrarMuestras ? '▼' : '►'}
-          </h3>
-          {!mostrarMuestras && (
-            <div>
-              <p><strong>Fecha/Hora inicio:</strong> {serieTemporalSimulada.fechaHoraInicio}</p>
-              <p><strong>Frecuencia de muestreo:</strong> {serieTemporalSimulada.frecuenciaMuestreo}</p>
-              <p><strong>Alerta de alarma:</strong> {serieTemporalSimulada.alertaAlarma}</p>
+        {/* Clasificación por estación y series */}
+        {datosEvento?.clasificacionPorEstacion && datosEvento.clasificacionPorEstacion.length > 0 && (
+          <div className="detalles-seccion">
+            <h3>Clasificación por Estación Sismológica</h3>
+            <div className="estaciones-grid">
+              {datosEvento.clasificacionPorEstacion.map((estacion, idxEst) => (
+                <div key={idxEst} className="estacion-item">
+                  <h4>{estacion.nombreEstacion}</h4>
+                  {estacion.series && estacion.series.length > 0 && (
+                    <div className="series-grid">
+                      {estacion.series.map((serie, idxSerie) => (
+                        <div key={serie.id} className="serie-temporal-item">
+                          {/* <h5>Serie #{idxSerie + 1}</h5> */}
+                          <p><strong>ID Serie:</strong> {serie.id}</p>
+                          <p><strong>Condición de Alarma:</strong> {serie.condicionAlarma}</p>
+                          <p><strong>Fecha/Hora Registro:</strong> {formatearFechaHora(serie.fechaHoraRegistro)}</p>
+                          <p><strong>Fecha/Hora Inicio Muestras:</strong> {formatearFechaHora(serie.fechaHoraInicioMuestras)}</p>
+                          <p><strong>Frecuencia de Muestreo:</strong> {serie.frecuenciaMuestras}</p>
+                          <p><strong>Número de Muestras:</strong> {serie.muestras?.length || 0}</p>
+                          <button
+                            className="servicio-btn-small"
+                            style={{ marginBottom: '1rem' }}
+                            onClick={() => setMostrarMuestras(m => m === `${idxEst}-${idxSerie}` ? false : `${idxEst}-${idxSerie}`)}
+                          >
+                            {mostrarMuestras === `${idxEst}-${idxSerie}` ? 'Ocultar Muestras' : 'Ver Muestras'}
+                          </button>
+                          {mostrarMuestras === `${idxEst}-${idxSerie}` && serie.muestras && (
+                            <div className="muestras-grid">
+                              {serie.muestras.map((muestra, idxMuestra) => (
+                                <div key={muestra.id} className="muestra-item">
+                                  <h6>Muestra #{idxMuestra + 1}</h6>
+                                  <p><strong>Fecha/Hora:</strong> {formatearFechaHora(muestra.fechaHoraMuestra)}</p>
+                                  <div className="detalles-muestra">
+                                    <p><strong>Velocidad:</strong> {obtenerValorDetalle(muestra.detalles, 'Velocidad')} m/s</p>
+                                    <p><strong>Frecuencia:</strong> {obtenerValorDetalle(muestra.detalles, 'Frecuencia')} Hz</p>
+                                    <p><strong>Longitud:</strong> {obtenerValorDetalle(muestra.detalles, 'Longitud')} m</p>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
-          )}
-          {mostrarMuestras && (
-            <div>
-              <p><strong>Fecha/Hora inicio:</strong> {serieTemporalSimulada.fechaHoraInicio}</p>
-              <p><strong>Frecuencia de muestreo:</strong> {serieTemporalSimulada.frecuenciaMuestreo}</p>
-              <p><strong>Alerta de alarma:</strong> {serieTemporalSimulada.alertaAlarma}</p>
-              <h4>Muestras:</h4>
-              <ul>
-                {serieTemporalSimulada.muestras.map((muestra, index) => (
-                  <li key={index} className="muestra-item">
-                    <p><strong>Fecha/Hora muestra {index + 1}:</strong> {muestra.fechaHora}</p>
-                    <p><strong>Velocidad de onda:</strong> {muestra.velocidadOnda}</p>
-                    <p><strong>Frecuencia de onda:</strong> {muestra.frecuenciaOnda}</p>
-                    <p><strong>Longitud:</strong> {muestra.longitud}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
 
+        <div>
+          <button className='btn-mapa btn mt-4'>Visualizar en un mapa el Evento Sísmico</button>
+        </div>
         <div className="botones-accion">
-          <button 
-            className="servicio-btn"
+          <button
+            className="btn-confirmar"
             onClick={() => navigate('/servicios/registrar-revision')}
           >
-            Volver a la lista de eventos
+            Confirmar evento
+          </button>
+          <button
+            className="btn-rechazar"
+            onClick={() => navigate('/servicios/registrar-revision')}
+          >
+            Rechazar evento
+          </button>
+          <button
+            className="btn-revision"
+            onClick={() => navigate('/servicios/registrar-revision')}
+          >
+            Solicitar revisión a experto
           </button>
         </div>
       </div>

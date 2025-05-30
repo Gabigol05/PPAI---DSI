@@ -74,10 +74,10 @@ const RegistrarRevision = () => {
     }
   }, [eventId, eventosSismicos]);
 
-  const handleSeleccionarEvento = async (id) => {
+  const handleSeleccionarEvento = async (evento) => {
     try {
       // Realizar la llamada PUT al endpoint de bloqueo
-      const response = await fetch(`${API_URL}/eventos-sismos/eventos/${id}/bloquear`, {
+      const response = await fetch(`${API_URL}/eventos-sismos/eventos/${evento.id}/bloquear`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -87,9 +87,16 @@ const RegistrarRevision = () => {
         credentials: 'include'
       });
 
+      if (!response.ok) {
+        throw new Error('Error al bloquear el evento');
+      }
 
-      // Navegamos al detalle del evento, pasando los datos actualizados
-      navigate(`/servicios/evento/${id}`)
+      // Navegamos al detalle del evento, pasando el evento bloqueado
+      navigate(`/servicios/evento/${evento.id}`, {
+        state: { 
+          eventoBloqueado: evento
+        }
+      });
 
     } catch (error) {
       console.error('Error en handleSeleccionarEvento:', error);
@@ -139,7 +146,7 @@ const RegistrarRevision = () => {
               <p><strong>Magnitud:</strong> {evento.magnitud}</p>
               <button 
                 className="servicio-btn"
-                onClick={() => handleSeleccionarEvento(evento.id)}
+                onClick={() => handleSeleccionarEvento(evento)}
               >
                 Seleccionar Evento
               </button>

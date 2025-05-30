@@ -127,6 +127,67 @@
   padding: 0;
 }
 
+.btn-sismograma {
+  background-color: #305a00;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+}
+
+.btn-mapa{
+  background-color: #2b96c0;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+}
+
+.btn-confirmar {
+  background-color: #218521c9;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+  width: 100%;
+  display: block;
+}
+
+.btn-rechazar {
+  background-color: #ad2d2dd2;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+  width: 100%;
+  display: block;
+}
+
+.btn-revision {
+  background-color: #d1c113e7;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+  width: 100%;
+  display: block;
+}
+
 .servicio-btn {
   background-color: #007bff;
   color: white;
@@ -264,4 +325,4 @@
   .detalles-seccion {
     padding: 1rem;
   }
-} 
+}
