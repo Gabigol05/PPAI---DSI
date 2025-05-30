@@ -10,7 +10,7 @@ import RegistrarRevision from './components/servicios/RegistrarRevision';
 import GestionReportes from './components/servicios/GestionReportes';
 import AnalisisDatos from './components/servicios/AnalisisDatos';
 import Contacto from './components/Contacto';
-import EventoSeleccionado from './components/servicios/EventoSeleccionado';
+import EventoDetalle from './components/servicios/EventoDetalle';
 
 function App() {
   return (
@@ -23,9 +23,9 @@ function App() {
           <Route path="/servicios" element={<Servicios />} />
           <Route path="/servicios/cerrar-orden" element={<CerrarOrden />} />
           <Route path="/servicios/registrar-revision" element={<RegistrarRevision />} />
+          <Route path="/servicios/evento/:id" element={<EventoDetalle />} />
           <Route path="/servicios/gestion-reportes" element={<GestionReportes />} />
           <Route path="/servicios/analisis-datos" element={<AnalisisDatos />} />
-          <Route path="/servicios/evento/:eventId" element={<EventoSeleccionado />} />
           <Route path="/contacto" element={<Contacto />} />
         </Routes>
       </div>

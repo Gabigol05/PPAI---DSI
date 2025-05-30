@@ -24,7 +24,7 @@
 }
 
 .servicio-contenido {
-  background: #f8f9fa;
+  background-color: #fff;
   border-radius: 8px;
   padding: 2rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -53,17 +53,16 @@
 }
 
 .evento-item {
-  background-color: #e9ecef;
-  border: 1px solid #ced4da;
-  border-radius: 5px;
+  border: 1px solid #ddd;
   padding: 1rem;
   margin-bottom: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  border-radius: 4px;
+  background-color: #f9f9f9;
 }
 
-.evento-item:hover {
-  background-color: #d3dce0;
+.evento-item.selected {
+  border-color: #007bff;
+  background-color: #e6f3ff;
 }
 
 .evento-item p {
@@ -128,20 +127,34 @@
   padding: 0;
 }
 
-.servicio-btn-small {
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
-  background-color: #09852e;
+.servicio-btn {
+  background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 1rem;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+}
+
+.servicio-btn:hover {
+  background-color: #0056b3;
+}
+
+.servicio-btn-small {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
 }
 
 .servicio-btn-small:hover {
-  background-color: #076c25;
+  background-color: #218838;
 }
 
 .sismograma-placeholder {
@@ -151,4 +164,104 @@
   color: #026b94;
   margin-top: 2rem;
   border-radius: 8px;
+}
+
+/* Estilos para el componente EventoDetalle */
+.detalles-seccion {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border-left: 4px solid #007bff;
+}
+
+.detalles-seccion h3 {
+  color: #007bff;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+.detalles-seccion h4 {
+  color: #495057;
+  margin: 1rem 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.detalles-seccion p {
+  margin: 0.5rem 0;
+  color: #212529;
+}
+
+.detalles-seccion strong {
+  color: #495057;
+  margin-right: 0.5rem;
+}
+
+.botones-accion {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-start;
+}
+
+/* Estilos para la serie temporal y muestras */
+.serie-temporal-container h3 {
+  cursor: pointer;
+  color: #007bff;
+  margin-bottom: 1rem;
+  transition: color 0.2s ease;
+}
+
+.serie-temporal-container h3:hover {
+  color: #0056b3;
+}
+
+.serie-temporal-info p,
+.serie-temporal-detalles > p {
+  margin-bottom: 0.5rem;
+}
+
+.serie-temporal-detalles h4 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  color: #007bff;
+  font-size: 1.2rem;
+}
+
+.muestra-item {
+  border: 1px solid #ced4da;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+  background-color: #e9ecef;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.muestra-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.muestra-item p {
+  margin: 0.3rem 0;
+  color: #212529;
+}
+
+.muestra-item p strong {
+  color: #495057;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .servicio-detalle-container {
+    padding: 1rem;
+  }
+
+  .servicio-contenido {
+    padding: 1rem;
+  }
+
+  .detalles-seccion {
+    padding: 1rem;
+  }
 } 
