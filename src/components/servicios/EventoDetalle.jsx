@@ -125,13 +125,18 @@ const EventoDetalle = () => {
                           <p><strong>Fecha/Hora Inicio Muestras:</strong> {formatearFechaHora(serie.fechaHoraInicioMuestras)}</p>
                           <p><strong>Frecuencia de Muestreo:</strong> {serie.frecuenciaMuestras}</p>
                           <p><strong>Número de Muestras:</strong> {serie.muestras?.length || 0}</p>
-                          <button
-                            className="servicio-btn-small"
-                            style={{ marginBottom: '1rem' }}
-                            onClick={() => setMostrarMuestras(m => m === `${idxEst}-${idxSerie}` ? false : `${idxEst}-${idxSerie}`)}
-                          >
-                            {mostrarMuestras === `${idxEst}-${idxSerie}` ? 'Ocultar Muestras' : 'Ver Muestras'}
-                          </button>
+                          <div className="botones-muestras-sismograma">
+                            <button
+                              className="servicio-btn-small"
+                              style={{ marginBottom: '1rem' }}
+                              onClick={() => setMostrarMuestras(m => m === `${idxEst}-${idxSerie}` ? false : `${idxEst}-${idxSerie}`)}
+                            >
+                              {mostrarMuestras === `${idxEst}-${idxSerie}` ? 'Ocultar Muestras' : 'Ver Muestras'}
+                            </button>
+                            <button className="btn-sismograma">
+                              Generar Sismograma
+                            </button>
+                          </div>
                           {mostrarMuestras === `${idxEst}-${idxSerie}` && serie.muestras && (
                             <div className="muestras-grid">
                               {serie.muestras.map((muestra, idxMuestra) => (
