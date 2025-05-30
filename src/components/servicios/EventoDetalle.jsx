@@ -13,6 +13,23 @@ const fetchOptions = {
   credentials: 'include'
 };
 
+// Opciones predefinidas para los combobox
+const OPCIONES_CLASIFICACION = [
+  'Sismo Superficial',
+  'Sismo Intermedio',
+  'Sismo Profundo'
+];
+const OPCIONES_ALCANCE = [
+  'Sismo Local',
+  'Sismo Regional',
+  'Sismo Tele sismos'
+];
+const OPCIONES_ORIGEN = [
+  'Interplaca',
+  'Volcánico',
+  'Provocado por explosiones de minas'
+];
+
 const EventoDetalle = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -22,6 +39,15 @@ const EventoDetalle = () => {
   const [datosEvento, setDatosEvento] = useState(null);
   const [loadingDetalles, setLoadingDetalles] = useState(true);
   const [errorDetalles, setErrorDetalles] = useState(null);
+  const [alertaConfirmar, setAlertaConfirmar] = useState(null);
+  const [alertaRechazar, setAlertaRechazar] = useState(null);
+  const [alertaRevisar, setAlertaRevisar] = useState(null);
+  const [modalEditar, setModalEditar] = useState(false);
+  const [editValues, setEditValues] = useState({
+    clasificacion: '',
+    alcance: '',
+    origen: ''
+  });
 
   useEffect(() => {
     const fetchDatosEvento = async () => {
@@ -49,6 +75,16 @@ const EventoDetalle = () => {
     fetchDatosEvento();
   }, [eventoBloqueado?.id]);
 
+  useEffect(() => {
+    if (datosEvento) {
+      setEditValues({
+        clasificacion: datosEvento.clasificacion || '',
+        alcance: datosEvento.alcance || '',
+        origen: datosEvento.origen || ''
+      });
+    }
+  }, [datosEvento]);
+
   // Utilidad para formatear fecha/hora
   const formatearFechaHora = (fechaHora) => {
     if (!fechaHora) return 'N/A';
@@ -71,6 +107,24 @@ const EventoDetalle = () => {
   const obtenerValorDetalle = (detalles, tipoDato) => {
     const detalle = detalles.find(d => d.tipoDatoDenominacion === tipoDato);
     return detalle ? detalle.valor : 'N/A';
+  };
+
+  // Handlers para modal de edición
+  const abrirModalEditar = () => setModalEditar(true);
+  const cerrarModalEditar = () => setModalEditar(false);
+
+  const handleEditChange = (e) => {
+    setEditValues({ ...editValues, [e.target.name]: e.target.value });
+  };
+
+  const handleGuardarEdicion = () => {
+    setDatosEvento({
+      ...datosEvento,
+      clasificacion: editValues.clasificacion,
+      alcance: editValues.alcance,
+      origen: editValues.origen
+    });
+    cerrarModalEditar();
   };
 
   if (!eventoBloqueado) {
@@ -99,12 +153,93 @@ const EventoDetalle = () => {
     <div className="servicio-detalle-container">
       <div className="servicio-contenido">
         <h2>Detalles del Evento Bloqueado</h2>
-        <div className="detalles-seccion">
+        {/* Alerta de éxito */}
+        {alertaConfirmar && (
+          <div className="modal-alerta-confirmar">
+            <div className="modal-alerta-confirmar-content">
+              {alertaConfirmar}
+            </div>
+          </div>
+        )}
+        {alertaRechazar && (
+          <div className="modal-alerta-rechazar">
+            <div className="modal-alerta-rechazar-content">
+              {alertaRechazar}
+            </div>
+          </div>
+        )}
+        {alertaRevisar && (
+          <div className="modal-alerta-revisar">
+            <div className="modal-alerta-revisar-content">
+              {alertaRevisar}
+            </div>
+          </div>
+        )}
+        <div className="detalles-seccion" style={{ position: 'relative' }}>
           <h3>Características Adicionales</h3>
           <p><strong>Clasificación:</strong> {datosEvento?.clasificacion || 'N/A'}</p>
           <p><strong>Alcance del Sismo:</strong> {datosEvento?.alcance || 'N/A'}</p>
           <p><strong>Origen de Generación:</strong> {datosEvento?.origen || 'N/A'}</p>
+          <button
+            className='servicio-btn'
+            style={{ marginTop: '1rem' }}
+            onClick={abrirModalEditar}
+          >
+            Editar características
+          </button>
         </div>
+
+        {/* Modal de edición */}
+        {modalEditar && (
+          <div className="modal-editar-overlay">
+            <div className="modal-editar">
+              <h4>Editar Características</h4>
+              <label>
+                Clasificación:
+                <select
+                  name="clasificacion"
+                  value={editValues.clasificacion}
+                  onChange={handleEditChange}
+                >
+                  <option value="">Seleccione...</option>
+                  {OPCIONES_CLASIFICACION.map(op => (
+                    <option key={op} value={op}>{op}</option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Alcance:
+                <select
+                  name="alcance"
+                  value={editValues.alcance}
+                  onChange={handleEditChange}
+                >
+                  <option value="">Seleccione...</option>
+                  {OPCIONES_ALCANCE.map(op => (
+                    <option key={op} value={op}>{op}</option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Origen:
+                <select
+                  name="origen"
+                  value={editValues.origen}
+                  onChange={handleEditChange}
+                >
+                  <option value="">Seleccione...</option>
+                  {OPCIONES_ORIGEN.map(op => (
+                    <option key={op} value={op}>{op}</option>
+                  ))}
+                </select>
+              </label>
+              <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                <button className="btn-confirmar" onClick={handleGuardarEdicion}>Guardar</button>
+                <button className="btn-rechazar" onClick={cerrarModalEditar}>Cancelar</button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Clasificación por estación y series */}
         {datosEvento?.clasificacionPorEstacion && datosEvento.clasificacionPorEstacion.length > 0 && (
@@ -168,13 +303,49 @@ const EventoDetalle = () => {
         <div className="botones-accion">
           <button
             className="btn-confirmar"
-            onClick={() => navigate('/servicios/registrar-revision')}
+            onClick={async () => {
+              try {
+                await fetch(`${API_URL}/eventos-sismos/eventos/${eventoBloqueado.id}/confirmar`, {
+                  method: 'PUT',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                  },
+                  mode: 'cors',
+                  credentials: 'include',
+                });
+                setAlertaConfirmar('El evento fue confirmado exitosamente.');
+                setTimeout(() => {
+                  navigate('/servicios');
+                }, 2000);
+              } catch (e) {
+                setAlerta('Ocurrió un error al rechazar el evento.');
+              }
+            }}
           >
             Confirmar evento
           </button>
           <button
             className="btn-rechazar"
-            onClick={() => navigate('/servicios/registrar-revision')}
+            onClick={async () => {
+              try {
+                await fetch(`${API_URL}/eventos-sismos/eventos/${eventoBloqueado.id}/actualizar-estado`, {
+                  method: 'PUT',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                  },
+                  mode: 'cors',
+                  credentials: 'include',
+                });
+                setAlertaRechazar('El evento fue rechazado exitosamente.');
+                setTimeout(() => {
+                  navigate('/servicios');
+                }, 2000);
+              } catch (e) {
+                setAlerta('Ocurrió un error al rechazar el evento.');
+              }
+            }}
           >
             Rechazar evento
           </button>

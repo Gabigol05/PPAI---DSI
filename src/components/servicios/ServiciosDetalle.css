@@ -141,6 +141,10 @@
   margin-bottom: 10px;
 }
 
+.btn-sismograma:hover {
+  background-color: #234200;
+}
+
 .btn-mapa{
   background-color: #2b96c0;
   color: white;
@@ -200,6 +204,7 @@
   cursor: pointer;
   font-size: 1rem;
   transition: background-color 0.2s;
+  width: 20%;
 }
 
 .servicio-btn:hover {
@@ -320,6 +325,105 @@
 
 .muestra-item p strong {
   color: #495057;
+}
+
+.modal-alerta-confirmar {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.modal-alerta-confirmar-content {
+  background: #218521c9;
+  color: #fff;
+  border: 1.5px solid #b7e0c3;
+  border-radius: 8px;
+  padding: 1.5rem 2.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  text-align: center;
+}
+.modal-alerta-rechazar {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.modal-alerta-rechazar-content {
+  background: #ad2d2dd2;
+  color: #fff;
+  border: 1.5px solid #b7e0c3;
+  border-radius: 8px;
+  padding: 1.5rem 2.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  text-align: center;
+}
+
+.modal-alerta-revisar {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.modal-alerta-revisar-content {
+  background: #d1c113e7;
+  color: #fff;
+  border: 1.5px solid #b7e0c3;
+  border-radius: 8px;
+  padding: 1.5rem 2.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  text-align: center;
+}
+
+.modal-editar-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-editar {
+  background: #fff;
+  padding: 2rem 2.5rem;
+  border-radius: 8px;
+  min-width: 320px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.modal-editar label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #026b94;
+}
+.modal-editar select {
+  margin-top: 0.3rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
 }
 
 /* Estilos responsivos */
